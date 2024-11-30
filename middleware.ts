@@ -2,6 +2,11 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+export const config = {
+  matcher: ['/admin/:path*'],
+  runtime: 'nodejs'
+}
+
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient({ req, res })
@@ -10,7 +15,6 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
-  // If there's no session and the user is trying to access admin routes
   if (!session && req.nextUrl.pathname.startsWith('/admin')) {
     const redirectUrl = req.nextUrl.clone()
     redirectUrl.pathname = '/login'
@@ -18,8 +22,4 @@ export async function middleware(req: NextRequest) {
   }
 
   return res
-}
-
-export const config = {
-  matcher: ['/admin/:path*'],
 } 
