@@ -1,0 +1,17 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 2%
+    patch:
+      default:
+        target: 80%
+        threshold: 2%
+
+ignore:
+  - "**/*.test.{ts,tsx}"
+  - "**/*.spec.{ts,tsx}"
+  - "cypress/**/*"
+  - "jest.config.ts"
+  - "jest.setup.ts" 
