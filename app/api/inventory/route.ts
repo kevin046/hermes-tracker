@@ -1,39 +1,32 @@
 import { supabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
+import { syncInventory } from '@/lib/services/inventory'
 
-export async function GET() {
+export const runtime = 'edge'
+export const preferredRegion = 'fra1'
+
+export async function GET(request: Request) {
   try {
-    // This is where you'd implement the actual Hermes API integration
-    // For now, we'll just simulate some inventory data
-    const mockInventory = [
-      {
-        product_name: 'Birkin 25',
-        sku: 'BK25-TOGO-NOIR',
-        available: Math.random() > 0.5,
-      },
-      {
-        product_name: 'Kelly 28',
-        sku: 'K28-EPSOM-GOLD',
-        available: Math.random() > 0.5,
-      },
-    ]
-
-    // Update the inventory in Supabase
-    for (const item of mockInventory) {
-      await supabase
-        .from('inventory')
-        .upsert(
-          {
-            ...item,
-            last_checked: new Date().toISOString(),
-          },
-          { onConflict: 'sku' }
-        )
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      return NextResponse.json(
+        { error: 'Supabase configuration missing' },
+        { status: 500 }
+      )
     }
 
-    return NextResponse.json({ success: true })
+    // Verify the request is from our cron job
+    const authHeader = request.headers.get('authorization')
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET_KEY}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const result = await syncInventory()
+    return NextResponse.json(result)
   } catch (error) {
-    console.error('Error updating inventory:', error)
-    return NextResponse.json({ error: 'Failed to update inventory' }, { status: 500 })
+    console.error('Cron job failed:', error)
+    return NextResponse.json(
+      { error: 'Failed to check inventory' },
+      { status: 500 }
+    )
   }
 } 
