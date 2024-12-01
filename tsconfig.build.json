@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "cypress",
+    "cypress.config.ts",
+    "**/*.cy.ts",
+    "**/*.cy.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+} 
