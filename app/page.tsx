@@ -1,5 +1,6 @@
 import InventoryList from '@/components/InventoryList'
 import SubscriptionForm from '@/components/SubscriptionForm'
+import Disclaimer from '@/components/Disclaimer'
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
         <section className="border rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Current Inventory</h2>
           <InventoryList />
+          <Disclaimer />
         </section>
         
         <section className="border rounded-lg p-6">

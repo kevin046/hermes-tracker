@@ -2,6 +2,12 @@
 
 [![Deploy to Vercel](https://github.com/kevin046/hermes-tracker/actions/workflows/deploy.yml/badge.svg)](https://github.com/kevin046/hermes-tracker/actions/workflows/deploy.yml)
 
+## Features
+- Multi-region inventory tracking
+- Stealth browser automation
+- Error handling and retries
+- Real-time inventory updates
+
 ## Deployment Status
 
 The application is automatically deployed to Vercel when changes are pushed to the main branch.

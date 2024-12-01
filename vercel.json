@@ -12,11 +12,5 @@
     "deploymentEnabled": {
       "main": true
     }
-  },
-  "hooks": [
-    {
-      "type": "deploy",
-      "url": "https://api.vercel.com/v1/integrations/deploy/prj_nYfSJRw52ggAILhNurU3MidWvuxf/TrHYfhzuoo"
-    }
-  ]
+  }
 } 

@@ -118,12 +118,12 @@ export default function InventoryList() {
             </div>
             <div className="mt-4">
               <a
-                href={item.url}
+                href="https://www.hermes.com/us/en/category/women/bags-and-small-leather-goods/bags-and-clutches/#|"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 text-sm"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
-                View on Hermes →
+                Browse on Hermes →
               </a>
             </div>
           </div>

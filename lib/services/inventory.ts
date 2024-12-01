@@ -2,6 +2,8 @@ import { hermesClient } from '@/lib/hermes/client'
 import { supabase } from '@/lib/supabase'
 import { checkAndNotify } from '@/lib/notifications'
 
+const HERMES_BASE_URL = 'https://www.hermes.com/us/en';
+
 export async function syncInventory() {
   try {
     // Fetch latest inventory from Hermes
@@ -18,7 +20,7 @@ export async function syncInventory() {
             available: product.available,
             price: product.price,
             currency: product.currency,
-            url: product.url,
+            url: product.url || `${HERMES_BASE_URL}/search/?s=${encodeURIComponent(product.sku)}`,
             image_url: product.imageUrl,
             category: product.category,
             last_checked: new Date().toISOString(),
