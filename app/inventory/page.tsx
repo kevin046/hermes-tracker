@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import Image from 'next/image'
 
 interface Product {
   id: string;
@@ -10,16 +9,13 @@ interface Product {
   sku: string;
   price?: string;
   available: boolean;
-  url: string;
   color?: string;
   material?: string;
   size?: string;
-  region: string;
-  image_url?: string;
   last_checked: string;
 }
 
-export default function InventoryList() {
+export default function InventoryPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState({
@@ -64,6 +60,26 @@ export default function InventoryList() {
     }
   }
 
+  const triggerScrape = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET_KEY}`
+        }
+      })
+      const data = await response.json()
+      if (data.success) {
+        await fetchProducts()
+      }
+    } catch (error) {
+      console.error('Error triggering scrape:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const filteredProducts = products.filter(product => {
     const matchesSearch = 
       product.name.toLowerCase().includes(filter.search.toLowerCase()) ||
@@ -90,16 +106,26 @@ export default function InventoryList() {
   const uniqueMaterials = Array.from(new Set(products.map(p => p.material).filter(Boolean)));
   const uniqueSizes = Array.from(new Set(products.map(p => p.size).filter(Boolean)));
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[200px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  );
 
   return (
-    <div className="space-y-4">
+    <div className="p-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Inventory</h1>
+        <button
+          onClick={triggerScrape}
+          disabled={loading}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+        >
+          {loading ? 'Updating...' : 'Update Inventory'}
+        </button>
+      </div>
+
+      {/* Filters */}
       <div className="mb-8 space-y-4">
         <input
           type="text"
@@ -144,19 +170,15 @@ export default function InventoryList() {
         </div>
       </div>
 
+      {/* Results count */}
+      <p className="mb-4 text-gray-600">
+        Showing {filteredProducts.length} of {products.length} products
+      </p>
+
+      {/* Product grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProducts.map((product) => (
           <div key={product.id} className="border p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
-            {product.image_url && (
-              <div className="relative h-48 mb-4">
-                <Image
-                  src={product.image_url}
-                  alt={product.name}
-                  fill
-                  className="object-cover rounded-md"
-                />
-              </div>
-            )}
             <h2 className="text-xl font-semibold">{product.name}</h2>
             <p className="text-gray-600">SKU: {product.sku}</p>
             {product.price && (
@@ -178,16 +200,6 @@ export default function InventoryList() {
             {product.size && (
               <p className="text-gray-600">Size: {product.size}</p>
             )}
-            <div className="mt-4">
-              <a
-                href={product.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                View on Hermes →
-              </a>
-            </div>
             <p className="text-sm text-gray-500 mt-2">
               Last checked: {new Date(product.last_checked).toLocaleString()}
             </p>
@@ -201,5 +213,5 @@ export default function InventoryList() {
         </div>
       )}
     </div>
-  );
+  )
 } 
