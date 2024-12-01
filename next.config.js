@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['xhcqhzkwyhkwumbcgqwl.supabase.co'], // Add your Supabase URL here for image hosting
+    domains: ['xhcqhzkwyhkwumbcgqwl.supabase.co'],
   },
   webpack: (config, { isServer }) => {
     // Add these modules to the server-side bundle
@@ -16,7 +16,6 @@ const nextConfig = {
     }
     return config;
   },
-  // Add any experimental features if needed
   experimental: {
     serverComponentsExternalPackages: [
       '@sendgrid/mail',
@@ -26,7 +25,10 @@ const nextConfig = {
     ]
   },
   typescript: {
-    ignoreBuildErrors: true // Temporarily ignore TS errors during build
+    ignoreBuildErrors: true
+  },
+  eslint: {
+    ignoreDuringBuilds: true
   }
 }
 

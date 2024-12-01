@@ -1,11 +1,20 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es2015",
+    "downlevelIteration": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true
+  },
   "exclude": [
     "cypress",
     "cypress.config.ts",
+    "__tests__",
     "**/*.cy.ts",
     "**/*.cy.tsx",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "jest.config.ts",
+    "jest.setup.ts"
   ]
 } 

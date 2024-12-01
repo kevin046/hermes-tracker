@@ -1,0 +1,9 @@
+__tests__
+cypress
+cypress.config.ts
+jest.config.ts
+jest.setup.ts
+*.test.ts
+*.test.tsx
+*.cy.ts
+*.cy.tsx 

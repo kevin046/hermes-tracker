@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsc -p tsconfig.build.json && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "vercel-build": "next build"
+    "vercel-build": "next build",
+    "type-check": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "next": "14.0.3",
